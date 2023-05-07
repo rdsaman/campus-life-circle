@@ -12,13 +12,10 @@ import javax.annotation.Resource;
 import java.util.List;
 
 /**
- * <p>
- * 前端控制器
- * </p>
- *
- * @author 虎哥
- * @since 2021-12-22
- */
+ * 控制器
+ * @Author israein
+ * @date 20:17 2023/5/6
+ **/
 @RestController
 @RequestMapping("/shop-type")
 public class ShopTypeController {
