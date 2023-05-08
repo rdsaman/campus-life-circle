@@ -7,9 +7,12 @@ import com.dzdp.dto.Result;
 import com.dzdp.entity.Shop;
 import com.dzdp.service.IShopService;
 import com.dzdp.utils.SystemConstants;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+
+import static com.dzdp.utils.RedisConstants.CACHE_SHOP_KEY;
 
 /**
  * <p>
@@ -22,7 +25,6 @@ import javax.annotation.Resource;
 @RestController
 @RequestMapping("/shop")
 public class ShopController {
-
     @Resource
     public IShopService shopService;
 
@@ -33,7 +35,7 @@ public class ShopController {
      */
     @GetMapping("/{id}")
     public Result queryShopById(@PathVariable("id") Long id) {
-        return Result.ok(shopService.getById(id));
+        return shopService.queryById(id);
     }
 
     /**
@@ -57,8 +59,9 @@ public class ShopController {
     @PutMapping
     public Result updateShop(@RequestBody Shop shop) {
         // 写入数据库
-        shopService.updateById(shop);
-        return Result.ok();
+        // shopService.updateById(shop);
+        // return Result.ok();
+        return shopService.update(shop);
     }
 
     /**
