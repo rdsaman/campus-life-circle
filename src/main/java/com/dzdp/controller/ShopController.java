@@ -13,15 +13,11 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 
 import static com.dzdp.utils.RedisConstants.CACHE_SHOP_KEY;
-
 /**
- * <p>
- * 前端控制器
- * </p>
- *
- * @author 虎哥
- * @since 2021-12-22
- */
+ * 商铺控制器
+ * @Author israein
+ * @date 15:58 2023/5/8
+ **/
 @RestController
 @RequestMapping("/shop")
 public class ShopController {
