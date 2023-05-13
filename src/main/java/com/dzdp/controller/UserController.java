@@ -1,11 +1,9 @@
 package com.dzdp.controller;
 
 
-import cn.hutool.core.util.RandomUtil;
 import com.dzdp.dto.LoginFormDTO;
 import com.dzdp.dto.Result;
 import com.dzdp.dto.UserDTO;
-import com.dzdp.entity.User;
 import com.dzdp.entity.UserInfo;
 import com.dzdp.service.IUserInfoService;
 import com.dzdp.service.IUserService;
@@ -17,7 +15,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 
 /**
- * 控制器
+ * 用户控制器
  * @Author israein
  * @date 20:27 2023/5/6
  **/

@@ -1,5 +1,10 @@
 package com.dzdp.utils;
 
+/**
+ * Redis常量
+ * @Author israein
+ * @date 16:20 2023/5/13
+ **/
 public class RedisConstants {
     public static final String LOGIN_CODE_KEY = "login:code:";
     public static final Long LOGIN_CODE_TTL = 2L;
