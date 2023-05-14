@@ -19,4 +19,6 @@ public interface IVoucherOrderService extends IService<VoucherOrder> {
      * @return com.dzdp.dto.Result
      **/
     Result seckillVoucher(Long voucherId);
+
+    Result createVoucherOrder(Long voucherId);
 }
