@@ -8,6 +8,7 @@ import com.dzdp.service.ISeckillVoucherService;
 import com.dzdp.service.IVoucherOrderService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.dzdp.utils.RedisIdWorker;
+import com.dzdp.utils.SimpleRedisLock;
 import com.dzdp.utils.UserHolder;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -110,13 +111,33 @@ public class VoucherOrderServiceImpl extends ServiceImpl<VoucherOrderMapper, Vou
             return Result.fail("库存不足!");
         }
         Long userId = UserHolder.getUser().getId();
-        synchronized (userId.toString().intern()) {
-            // 用this 调用的是当前实现类对象, 如果有多次调用, 每次都能够获取到, 事务失效了
-            // return this.createVoucherOrder(voucherId);
-            // 因此需要使用代理让事务生效, 获取代理对象(事务)
+        // 分布式锁
+        // 5.创建锁对象
+        SimpleRedisLock lock = new SimpleRedisLock("order:" + userId, stringRedisTemplate);
+        // 5.1.获取锁对象
+        boolean isLock = lock.tryLock(1200);
+        // 5.2.加锁失败
+        if (!isLock) {
+            return Result.fail("不允许重复下单!");
+        }
+        try {
+            // 需要使用代理让事务生效, 获取代理对象(事务)
             IVoucherOrderService proxy = (IVoucherOrderService) AopContext.currentProxy();
             return proxy.createVoucherOrder(voucherId);
+        }  finally {
+            // 释放锁
+            lock.unLock();
         }
+
+
+        // 单体环境下的一人一单功能
+        // synchronized (userId.toString().intern()) {
+        //     // 用this 调用的是当前实现类对象, 如果有多次调用, 每次都能够获取到, 事务失效了
+        //     // return this.createVoucherOrder(voucherId);
+        //     // 因此需要使用代理让事务生效, 获取代理对象(事务)
+        //     IVoucherOrderService proxy = (IVoucherOrderService) AopContext.currentProxy();
+        //     return proxy.createVoucherOrder(voucherId);
+        // }
     }
 
     @Transactional

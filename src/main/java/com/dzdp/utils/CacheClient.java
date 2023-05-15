@@ -9,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
 import java.time.LocalDateTime;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -17,11 +16,10 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
 import static com.dzdp.utils.RedisConstants.*;
-import static com.dzdp.utils.RedisConstants.CACHE_SHOP_TTL;
 
 /**
  * @Classname CacheClient
- * @Description TODO
+ * @Description Redis工具类
  * @Author israein
  * @Date 2023-05-09 17:23
  */
