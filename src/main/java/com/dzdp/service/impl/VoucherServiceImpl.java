@@ -9,12 +9,15 @@ import com.dzdp.entity.SeckillVoucher;
 import com.dzdp.service.ISeckillVoucherService;
 import com.dzdp.service.IVoucherService;
 import com.dzdp.utils.RedisIdWorker;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
 import java.util.List;
+
+import static com.dzdp.utils.RedisConstants.SECKILL_STOCK_KEY;
 
 /**
  * 优惠卷服务实现类
@@ -23,7 +26,8 @@ import java.util.List;
  **/
 @Service
 public class VoucherServiceImpl extends ServiceImpl<VoucherMapper, Voucher> implements IVoucherService {
-
+    @Resource
+    private StringRedisTemplate stringRedisTemplate;
     @Resource
     private ISeckillVoucherService seckillVoucherService;
 
@@ -53,6 +57,9 @@ public class VoucherServiceImpl extends ServiceImpl<VoucherMapper, Voucher> impl
         seckillVoucher.setBeginTime(voucher.getBeginTime());
         seckillVoucher.setEndTime(voucher.getEndTime());
         seckillVoucherService.save(seckillVoucher);
+
+        // 保存秒杀库存到redis
+        stringRedisTemplate.opsForValue().set(SECKILL_STOCK_KEY + voucher.getId(), voucher.getStock().toString());
     }
 
 }
