@@ -22,6 +22,13 @@ public class VoucherOrderController {
     @Resource
     private IVoucherOrderService voucherOrderService;
 
+    /**
+     * 秒杀下单
+     * @Author israein
+     * @date 19:42 2023/5/29
+     * @param voucherId
+     * @return com.dzdp.dto.Result
+     **/
     @PostMapping("seckill/{id}")
     public Result seckillVoucher(@PathVariable("id") Long voucherId) {
         return voucherOrderService.seckillVoucher(voucherId);

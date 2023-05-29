@@ -3,6 +3,7 @@ package com.dzdp.service;
 import com.dzdp.dto.Result;
 import com.dzdp.entity.Voucher;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.dzdp.entity.VoucherOrder;
 
 /**
  * 优惠卷服务接口
@@ -27,5 +28,4 @@ public interface IVoucherService extends IService<Voucher> {
      * @param voucher
      **/
     void addSeckillVoucher(Voucher voucher);
-
 }
