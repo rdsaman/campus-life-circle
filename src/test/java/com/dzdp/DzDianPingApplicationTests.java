@@ -105,4 +105,11 @@ class DzDianPingApplicationTests {
     //     }
     //     fw.close();
     // }
+
+    // @Test
+    // public void testCreateStreamAndGroup() {
+    //     stringRedisTemplate.opsForStream().createGroup(
+    //
+    //     )
+    // }
 }
