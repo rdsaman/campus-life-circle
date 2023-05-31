@@ -12,6 +12,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 
+/**
+ * 文件上传控制器
+ * @Author israein
+ * @date 19:37 2023/5/31
+ **/
 @Slf4j
 @RestController
 @RequestMapping("upload")

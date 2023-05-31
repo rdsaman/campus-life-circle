@@ -12,13 +12,10 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
- * <p>
- * 
- * </p>
- *
- * @author 虎哥
- * @since 2021-12-22
- */
+ * 探店笔记
+ * @Author israein
+ * @date 21:19 2023/5/31
+ **/
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
