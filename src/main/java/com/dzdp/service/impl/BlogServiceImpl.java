@@ -1,5 +1,7 @@
 package com.dzdp.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.dzdp.dto.Result;
 import com.dzdp.dto.UserDTO;
@@ -16,17 +18,16 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.dzdp.utils.RedisConstants.BLOG_LIKED_KEY;
 
 /**
- * <p>
- *  服务实现类
- * </p>
- *
- * @author 虎哥
- * @since 2021-12-22
- */
+ * 探店笔记服务实现类
+ * @Author israein
+ * @date 19:56 2023/6/1
+ **/
 @Service
 public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements IBlogService {
     @Resource
@@ -70,11 +71,11 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements IB
         // 查询用户
         queryBlogUser(blog);
         // 3.查询探店笔记是否被点赞
-        isBlogLike(blog);
+        isBlogLiked(blog);
         return Result.ok(blog);
     }
 
-    private void isBlogLike(Blog blog) {
+    private void isBlogLiked(Blog blog) {
         // 1.获取当前登录用户
         UserDTO user = UserHolder.getUser();
         if (user == null) {
@@ -170,6 +171,36 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements IB
         });
         return Result.ok(records);
     }
+
+    /**
+     * 查询点赞列表
+     * @Author israein
+     * @date 20:20 2023/6/1
+     * @param id
+     * @return com.dzdp.dto.Result
+     **/
+    @Override
+    public Result queryBlogLikes(Long id) {
+        // 1.查询top5的点赞用户 zrange key 0 4
+        String key = BLOG_LIKED_KEY + id;
+        // 如果在redis中没有查到数据会sql报错
+        Set<String> top5 = stringRedisTemplate.opsForZSet().range(key, 0, 4);
+        // 2.解析出其中的用户id
+        List<Long> ids = top5.stream().map(Long::valueOf).collect(Collectors.toList());
+        if (ids == null || ids.isEmpty()) {
+            return Result.ok("暂时没有人点赞");
+        }
+        String idStr = StrUtil.join(",", ids);
+        // 3.根据id查询用户(5个,封装到List中) where id in (5, 1)  order by field(id, 5, 1)
+        List<UserDTO> userDTOList = userService.query()
+                .in("id", ids).last("ORDER BY FIELD(id," + idStr + ")").list()
+                .stream()
+                .map(user -> BeanUtil.copyProperties(user, UserDTO.class))
+                .collect(Collectors.toList());
+        // 4.返回
+        return Result.ok(userDTOList);
+    }
+
     /**
      * 查询探店笔记用户
      * @Author israein

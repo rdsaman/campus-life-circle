@@ -1,20 +1,45 @@
 package com.dzdp.controller;
 
 
-import org.springframework.web.bind.annotation.RequestMapping;
+import com.dzdp.dto.Result;
+import com.dzdp.service.IFollowService;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.bind.annotation.RestController;
+import javax.annotation.Resource;
 
 /**
- * <p>
- *  前端控制器
- * </p>
- *
- * @author 虎哥
- * @since 2021-12-22
- */
+ * 关注控制器
+ * @Author israein
+ * @date 20:51 2023/6/1
+ **/
 @RestController
 @RequestMapping("/follow")
 public class FollowController {
+    @Resource
+    private IFollowService followService;
 
+    /**
+     * 取消关注
+     * @Author israein
+     * @date 21:00 2023/6/1
+     * @param id
+     * @return com.dzdp.dto.Result
+     **/
+    @GetMapping("/or/not/{id}")
+    public Result isFollow(@PathVariable("id") Long id) {
+        return followService.isFollow(id);
+    }
+
+    /**
+     * 关注
+     * @Author israein
+     * @date 21:01 2023/6/1
+     * @param id
+     * @param isFollow
+     * @return com.dzdp.dto.Result
+     **/
+    @PutMapping("/{id}/{isFollow}")
+    public Result follow(@PathVariable("id") Long id, @PathVariable("isFollow") Boolean isFollow) {
+        return followService.follow(id, isFollow);
+    }
 }

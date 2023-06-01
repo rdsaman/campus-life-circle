@@ -54,4 +54,13 @@ public interface IBlogService extends IService<Blog> {
      * @return com.dzdp.dto.Result
      **/
     Result queryHotBlog(Integer current);
+
+    /**
+     * 查询点赞列表
+     * @Author israein
+     * @date 19:55 2023/6/1
+     * @param id
+     * @return com.dzdp.dto.Result
+     **/
+    Result queryBlogLikes(Long id);
 }
