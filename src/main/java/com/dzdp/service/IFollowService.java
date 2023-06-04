@@ -28,4 +28,13 @@ public interface IFollowService extends IService<Follow> {
      * @return com.dzdp.dto.Result
      **/
     Result follow(Long id, Boolean isFollow);
+
+    /**
+     * 共同关注
+     * @Author israein
+     * @date 15:47 2023/6/4
+     * @param id
+     * @return com.dzdp.dto.Result
+     **/
+    Result followCommons(Long id);
 }

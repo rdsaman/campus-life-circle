@@ -63,4 +63,14 @@ public interface IBlogService extends IService<Blog> {
      * @return com.dzdp.dto.Result
      **/
     Result queryBlogLikes(Long id);
+
+    /**
+     * 分页查询收邮箱
+     * @Author israein
+     * @date 16:56 2023/6/4
+     * @param max
+     * @param offset
+     * @return com.dzdp.dto.Result
+     **/
+    Result queryBlogOfFollow(Long max, Integer offset);
 }

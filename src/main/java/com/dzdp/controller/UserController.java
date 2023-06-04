@@ -1,9 +1,11 @@
 package com.dzdp.controller;
 
 
+import cn.hutool.core.bean.BeanUtil;
 import com.dzdp.dto.LoginFormDTO;
 import com.dzdp.dto.Result;
 import com.dzdp.dto.UserDTO;
+import com.dzdp.entity.User;
 import com.dzdp.entity.UserInfo;
 import com.dzdp.service.IUserInfoService;
 import com.dzdp.service.IUserService;
@@ -90,5 +92,24 @@ public class UserController {
         info.setUpdateTime(null);
         // 返回
         return Result.ok(info);
+    }
+
+    /**
+     * 根据id查询用户
+     * @Author israein
+     * @date 15:36 2023/6/4
+     * @param userId
+     * @return com.dzdp.dto.Result
+     **/
+    @GetMapping("/{id}")
+    public Result queryUserById(@PathVariable("id") Long userId) {
+        // 查询详情
+        User user = userService.getById(userId);
+        if (user == null) {
+            return Result.ok();
+        }
+        UserDTO userDTO = BeanUtil.copyProperties(user, UserDTO.class);
+        // 返回
+        return Result.ok(userDTO);
     }
 }
