@@ -27,4 +27,16 @@ public interface IShopService extends IService<Shop> {
      * @return com.dzdp.dto.Result
      **/
     Result update(Shop shop);
+
+    /**
+     * 附近商户功能
+     * @Author israein
+     * @date 16:41 2023/6/5
+     * @param typeId
+     * @param current
+     * @param x
+     * @param y
+     * @return com.dzdp.dto.Result
+     **/
+    Result queryShopByType(Integer typeId, Integer current, Double x, Double y);
 }

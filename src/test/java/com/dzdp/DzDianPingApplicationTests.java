@@ -6,6 +6,7 @@ import cn.hutool.core.lang.UUID;
 import com.dzdp.dto.UserDTO;
 import com.dzdp.entity.Shop;
 import com.dzdp.entity.User;
+import com.dzdp.service.IShopService;
 import com.dzdp.service.IUserService;
 import com.dzdp.service.impl.ShopServiceImpl;
 import com.dzdp.utils.CacheClient;
@@ -13,15 +14,15 @@ import org.junit.jupiter.api.Test;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.geo.Point;
+import org.springframework.data.redis.connection.RedisGeoCommands;
 import org.springframework.data.redis.core.StringRedisTemplate;
 
 import javax.annotation.Resource;
 import java.io.*;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import static com.dzdp.utils.RedisConstants.*;
 
@@ -31,7 +32,7 @@ class DzDianPingApplicationTests {
     @Resource
     private CacheClient cacheClient;
     @Resource
-    private ShopServiceImpl shopService;
+    private IShopService shopService;
     @Resource
     private RedissonClient redissonClient;
     @Resource
@@ -111,5 +112,36 @@ class DzDianPingApplicationTests {
     //     stringRedisTemplate.opsForStream().createGroup(
     //
     //     )
+    // }
+
+    /**
+     * 导入店铺数据到GEO
+     * @Author israein
+     * @date 15:54 2023/6/5
+     **/
+    // @Test
+    // void testLoadShopData() {
+    //     // 1.查询店铺信息
+    //     List<Shop> list = shopService.list();
+    //     // 2.把店铺分组, 按照type_id(数据库中字段对应typeId)分组
+    //     Map<Long, List<Shop>> map = list.stream().collect(Collectors.groupingBy(Shop::getTypeId));
+    //     // 3.分批写入redis
+    //     for (Map.Entry<Long, List<Shop>> entry : map.entrySet()) {
+    //         // 3.1.获取类型id
+    //         Long typeId = entry.getKey();
+    //         String key = SHOP_GEO_KEY + typeId;
+    //         // 3.2.获取同类型的店铺集合
+    //         List<Shop> value = entry.getValue();
+    //         List<RedisGeoCommands.GeoLocation<String>> locations = new ArrayList<>(value.size());
+    //         // 3.3.写入redis GEOADD key 经度 纬度 值
+    //         for (Shop shop : value) {
+    //             // stringRedisTemplate.opsForGeo().add(key, new Point(shop.getX(), shop.getY()), shop.getId().toString());
+    //             locations.add(new RedisGeoCommands.GeoLocation<>(
+    //                     shop.getId().toString(),
+    //                     new Point(shop.getX(), shop.getY())
+    //             ));
+    //         }
+    //         stringRedisTemplate.opsForGeo().add(key, locations);
+    //     }
     // }
 }
