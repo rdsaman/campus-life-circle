@@ -112,4 +112,15 @@ public class UserController {
         // 返回
         return Result.ok(userDTO);
     }
+
+    /**
+     * 签到功能
+     * @Author israein
+     * @date 15:51 2023/6/6
+     * @return com.dzdp.dto.Result
+     **/
+    @PostMapping("/sign")
+    public Result sign() {
+        return userService.sign();
+    }
 }

@@ -39,7 +39,7 @@ import java.util.concurrent.Executors;
  **/
 @Service
 public class VoucherOrderServiceImpl extends ServiceImpl<VoucherOrderMapper, VoucherOrder> implements IVoucherOrderService {
-    @Autowired
+    @Resource
     private ISeckillVoucherService seckillVoucherService;
     @Resource
     private StringRedisTemplate stringRedisTemplate;

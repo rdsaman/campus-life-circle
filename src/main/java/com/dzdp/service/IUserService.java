@@ -35,4 +35,12 @@ public interface IUserService extends IService<User> {
      * @return com.dzdp.dto.Result
      **/
     Result login(LoginFormDTO loginForm, HttpSession session);
+
+    /**
+     * 签到功能
+     * @Author israein
+     * @date 15:51 2023/6/6
+     * @return com.dzdp.dto.Result
+     **/
+    Result sign();
 }
