@@ -8,13 +8,10 @@ import com.dzdp.entity.User;
 import javax.servlet.http.HttpSession;
 
 /**
- * <p>
- *  服务类
- * </p>
- *
- * @author 虎哥
- * @since 2021-12-22
- */
+ * 用户接口
+ * @Author israein
+ * @date 15:07 2023/6/8
+ **/
 public interface IUserService extends IService<User> {
     /**
      * 发送手机验证码
@@ -43,4 +40,12 @@ public interface IUserService extends IService<User> {
      * @return com.dzdp.dto.Result
      **/
     Result sign();
+
+    /**
+     * 签到统计
+     * @Author israein
+     * @date 15:07 2023/6/8
+     * @return com.dzdp.dto.Result
+     **/
+    Result signCount();
 }

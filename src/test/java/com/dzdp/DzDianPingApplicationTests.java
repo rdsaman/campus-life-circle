@@ -144,4 +144,40 @@ class DzDianPingApplicationTests {
     //         stringRedisTemplate.opsForGeo().add(key, locations);
     //     }
     // }
+
+    @Test
+    void testBitMap() {
+        int num = 59;
+        // String s = Integer.toBinaryString(num);
+        // System.out.println(s);
+        int count = 0;
+        int maxCount = 0;
+        while (num != 0) {
+            if ((num & 1) != 0) { // & 1 得该位置本身
+                count++;
+            } else {
+                if (count > maxCount) {
+                    maxCount = count;
+                }
+                count = 0;
+            }
+            num >>>= 1; // 右移一位
+        }
+        System.out.println(Math.max(count, maxCount));
+    }
+
+    @Test
+    void testHyperLogLog() {
+        String[] users = new String[1000];
+        int index = 0;
+        for (int i = 1; i <= 1000000; i++) {
+            users[index++] = "user_" + i;
+            if (i % 1000 == 0) {
+                index = 0;
+                stringRedisTemplate.opsForHyperLogLog().add("uv", users);
+            }
+        }
+        Long size = stringRedisTemplate.opsForHyperLogLog().size("uv");
+        System.out.println(size);
+    }
 }

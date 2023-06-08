@@ -123,4 +123,15 @@ public class UserController {
     public Result sign() {
         return userService.sign();
     }
+
+    /**
+     * 签到统计
+     * @Author israein
+     * @date 15:06 2023/6/8
+     * @return com.dzdp.dto.Result
+     **/
+    @GetMapping("/sign/count")
+    public Result signCount() {
+        return userService.signCount();
+    }
 }

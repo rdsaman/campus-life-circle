@@ -14,6 +14,7 @@ import com.dzdp.service.IUserService;
 import com.dzdp.utils.RegexUtils;
 import com.dzdp.utils.UserHolder;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.connection.BitFieldSubCommands;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.TimeoutUtils;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,7 @@ import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -144,6 +146,55 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         // 5.写入Redis SETBIT key offset 1
         stringRedisTemplate.opsForValue().setBit(key, dayOfMonth - 1, true);
         return Result.ok();
+    }
+
+    /**
+     * 签到统计(最长连续签到天数)
+     * @Author israein
+     * @date 15:07 2023/6/8
+     * @return com.dzdp.dto.Result
+     **/
+    @Override
+    public Result signCount() {
+        // 1.获取当前登录用户
+        Long userId = UserHolder.getUser().getId();
+        // 2.获取日期
+        LocalDateTime now = LocalDateTime.now();
+        // 3.拼接key
+        String keySuffix = now.format(DateTimeFormatter.ofPattern(":yyyyMM"));
+        String key = USER_SIGN_KEY + userId + keySuffix;
+        // 4.获取今天是本月的第几天
+        int dayOfMonth = now.getDayOfMonth();
+        // 5.从redis中读取数据: 获取本月到今天的所有签到记录, 返回一个十进制数字 BITFIELD key GET u14 0
+        List<Long> result = stringRedisTemplate.opsForValue().bitField(
+                key,
+                BitFieldSubCommands.create()
+                        .get(BitFieldSubCommands.BitFieldType.unsigned(dayOfMonth)).valueAt(0)
+        );
+        if (result == null || result.isEmpty()) {
+            // 6.结果为空表示没有签到记录
+            return Result.ok(0);
+        }
+        Long num = result.get(0);
+        if (num == null || num == 0) {
+            return Result.ok(0);
+        }
+        // 7.循环遍历
+        int count = 0;
+        int maxCount = 0;
+        while (num != 0) {
+            // 7.1.让这个数字与1做与运算，得到数字的最后一个bit位  // 判断这个bit位是否为0
+            if ((num & 1) != 0) {
+                count++;
+            } else {
+                if (count > maxCount) {
+                    maxCount = count;
+                }
+                count = 0;
+            }
+            num >>>= 1; // 右移一位
+        }
+        return Result.ok(Math.max(count, maxCount));
     }
 
     /**
