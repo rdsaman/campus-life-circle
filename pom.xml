@@ -8,10 +8,10 @@
         <version>2.3.12.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.dzdp</groupId>
-    <artifactId>da-zhong-dian-ping</artifactId>
+    <groupId>com.circle</groupId>
+    <artifactId>campus-life-circle</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>da-zhong-dian-ping</name>
+    <name>campus-life-circle</name>
     <description>Demo project for Spring Boot</description>
     <properties>
         <java.version>1.8</java.version>
